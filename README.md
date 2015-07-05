@@ -1,6 +1,6 @@
 # open-issue
 
-Did you know that by opening the correct url, you can actually create a new issue on Github with already predifined content? Just [click here](https://github.com/pauldijou/open-issue/issues/new?title=Test&labels%5B%5D=bug&labels%5B%5D=duplicate&assignee=pauldijou&milestone=fake&body=**Please%2C%20do%20not%20actually%20create%20the%20issue!!**%20This%20is%20just%20a%20test.%0A%0A%60%60%60javascript%0Avar%20a%20%3D%201%20%2B%202%3B%0A%60%60%60%0A%0A%23%23%20Subtitle%0A%0AHope%20you%20like%20it.%20Cheers.) to see it in action (**please, do not actually create the issue**). This lib will provide you an API to create such url and eventually open it in the browser. The goal is to have your users easily create issues on your project.
+Did you know that by opening the correct url, you can actually create a new issue on GitHub with already predefined content? Just [click here](https://github.com/pauldijou/open-issue/issues/new?title=Test&labels%5B%5D=bug&labels%5B%5D=duplicate&assignee=pauldijou&milestone=fake&body=**Please%2C%20do%20not%20actually%20create%20the%20issue!!**%20This%20is%20just%20a%20test.%0A%0A%60%60%60javascript%0Avar%20a%20%3D%201%20%2B%202%3B%0A%60%60%60%0A%0A%23%23%20Subtitle%0A%0AHope%20you%20like%20it.%20Cheers.) to see it in action (**please, do not actually create the issue**). This lib will provide you an API to create such url and eventually open it in the browser. The goal is to have your users easily create issues on your project.
 
 ## Install
 
