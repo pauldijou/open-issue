@@ -1,0 +1,35 @@
+{
+  "name": "open-issue",
+  "version": "0.1.0",
+  "description": "Open a new issue with preformatted content",
+  "license": "Apache-2.0",
+  "main": "index.js",
+  "homepage": "https://github.com/pauldijou/open-issue",
+  "bugs": {
+    "url": "https://github.com/pauldijou/open-issue/issues",
+    "email": "paul.dijou@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pauldijou/open-issue.git"
+  },
+  "author": {
+    "name": "Paul Dijou",
+    "email": "paul.dijou@gmail.com",
+    "url": "http://pauldijou.fr"
+  },
+  "keywords": [
+    "issue",
+    "open",
+    "new"
+  ],
+  "dependencies": {
+    "opn": "^3.0.0"
+  },
+  "devDependencies": {
+    "mocha": "*"
+  },
+  "scripts": {
+    "test": "mocha --reporter spec"
+  }
+}
