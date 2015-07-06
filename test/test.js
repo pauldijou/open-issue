@@ -1,7 +1,7 @@
 // So few tests that they can all fit in one file
 var issue;
 if (typeof require !== 'undefined') {
-  issue = require('./lib/node.js');
+  issue = require('../lib/node.js');
 } else {
   issue = OpenIssue;
 }

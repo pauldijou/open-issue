@@ -35,6 +35,7 @@
     "karma-jasmine": "^0.3.6"
   },
   "scripts": {
-    "test": "jasmine JASMINE_CONFIG_PATH=jasmine.json && karma start"
+    "test": "jasmine JASMINE_CONFIG_PATH=test/jasmine.json && karma start test/karma.conf.js",
+    "examples": "node ./examples/node_error.js"
   }
 }
