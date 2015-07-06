@@ -1,129 +1,163 @@
-var separator = '\n\n';
-
-var providers = {
-  github: {
-    url: 'https://github.com'
+(function (global, definition) {
+  if (typeof module !== 'undefined' && module.exports) {
+    module.exports = definition;
+  } else {
+    global.OpenIssue = definition(global.open);
   }
-};
+})(this, function (open) {
+  var separator = '\n\n';
 
-var providersNames = Object.keys(providers);
-
-function Issue() {
-  this.content = {
-    body: [],
-    labels: []
-  };
-
-  this.provider = function (provider) {
-    if (providersNames.indexOf(provider) < 0) {
-      throw new Error('Invalid provider [' + provider + ']');
-    }
-
-    this.content.provider = provider;
-    return this;
-  };
-
-  this.title = function (title) {
-    this.content.title = title;
-    return this;
-  };
-
-  this.repository = function (repository) {
-    this.content.repository = repository;
-    return this;
-  };
-
-  this.append = function (txt) {
-    this.content.body.push({
-      type: 'text',
-      value: txt
-    });
-    return this;
-  };
-
-  this.appendCode = function (code, lang) {
-    this.content.body.push({
-      type: 'code',
-      lang: lang,
-      value: code
-    });
-    return this;
-  };
-
-  this.labels = function () {
-    for (var i = 0, l = arguments.length; i < l; ++i) {
-      if (arguments[i] && this.content.labels.indexOf(arguments[i]) < 0) {
-        this.content.labels.push(arguments[i]);
+  var providers = {
+    github: {
+      url: 'https://github.com',
+      issueUrl: '/issues/new',
+      params: {
+        title: 'title',
+        body: 'body',
+        labels: 'labels%5B%5D',
+        assignee: 'assignee',
+        milestone: 'milestone'
       }
     }
-    return this;
   };
 
-  this.milestone = function (milestone) {
-    this.content.milestone = milestone;
-    return this;
-  };
+  var providersNames = Object.keys(providers);
 
-  this.assign = function (assignee) {
-    this.content.assignee = assignee;
-    return this;
-  };
+  function Issue() {
+    this.content = {
+      body: [],
+      labels: []
+    };
 
-  this.url = function () {
-    var isFirst = true;
-    function query(name, value) {
-      var res = '';
-      if (name && value) {
-        res = (isFirst ? '' : '&') + name + '=' + encodeURIComponent(value);
-        isFirst = false;
+    this.provider = function (provider) {
+      if (providersNames.indexOf(provider) < 0) {
+        throw new Error('Invalid provider [' + provider + ']');
       }
-      return res;
-    }
 
-    function extractBody(part) {
-      switch (part.type) {
-        case 'text':
-          return part.value;
-        case 'code':
-          return '```' + (part.lang || '') + '\n' + part.value + '\n```';
+      this.content.provider = provider;
+      return this;
+    };
+
+    this.title = function (title) {
+      this.content.title = title;
+      return this;
+    };
+
+    this.repository = function (repository) {
+      this.content.repository = repository;
+      return this;
+    };
+
+    this.append = function (txt) {
+      this.content.body.push({
+        type: 'text',
+        value: txt
+      });
+      return this;
+    };
+
+    this.appendCode = function (code, lang) {
+      this.content.body.push({
+        type: 'code',
+        lang: lang,
+        value: code
+      });
+      return this;
+    };
+
+    this.labels = function () {
+      for (var i = 0, l = arguments.length; i < l; ++i) {
+        if (arguments[i] && this.content.labels.indexOf(arguments[i]) < 0) {
+          this.content.labels.push(arguments[i]);
+        }
       }
-    }
+      return this;
+    };
 
-    var url = '';
-    url += providers[this.content.provider].url;
-    url += '/' + this.content.repository + '/issues/new?';
-    url += query('title', this.content.title);
-    this.content.labels.forEach(function (label) {
-      url += query('labels%5B%5D', label);
-    });
-    url += query('assignee', this.content.assignee);
-    url += query('milestone', this.content.milestone);
-    url += query('body', this.content.body.map(extractBody).join(separator));
-    return url;
+    this.milestone = function (milestone) {
+      this.content.milestone = milestone;
+      return this;
+    };
+
+    this.assign = function (assignee) {
+      this.content.assignee = assignee;
+      return this;
+    };
+
+    this.url = function () {
+      var isFirst = true;
+      function query(name, value) {
+        var res = '';
+        if (name && value) {
+          res = (isFirst ? '' : '&') + name + '=' + encodeURIComponent(value);
+          isFirst = false;
+        }
+        return res;
+      }
+
+      function extractBody(part) {
+        switch (part.type) {
+          case 'text':
+            return part.value;
+          case 'code':
+            return '```' + (part.lang || '') + '\n' + part.value + '\n```';
+        }
+      }
+
+      var provider = providers[this.content.provider];
+
+      var url = provider.url + '/' + this.content.repository + provider.issueUrl + '?';
+
+      if (provider.params.title) {
+        url += query(provider.params.title, this.content.title);
+      }
+
+      if (provider.params.labels) {
+        this.content.labels.forEach(function (label) {
+          url += query(provider.params.labels, label);
+        });
+      }
+
+      if (provider.params.assignee) {
+        url += query(provider.params.assignee, this.content.assignee);
+      }
+
+      if (provider.params.milestone) {
+        url += query(provider.params.milestone, this.content.milestone);
+      }
+
+      if (provider.params.body) {
+        url += query(provider.params.body, this.content.body.map(extractBody).join(separator));
+      }
+
+      return url;
+    };
+
+    this.open = function () {
+      open(this.url());
+      return this;
+    };
+  }
+
+  var result = function () {
+    return new Issue();
   };
 
-  this.open = function () {
-    require('opn')(this.url());
-    return this;
+  result.separator = function (sep) {
+    separator = sep;
   };
-}
 
-module.exports = function () {
-  return new Issue();
-};
+  // Add aliases for each provider
+  providersNames.forEach(function (name) {
+    result[name] = function (repo) {
+      var issue = new Issue();
+      issue.provider(name);
+      if (repo) {
+        issue.repository(repo);
+      }
+      return issue;
+    };
+  });
 
-module.exports.separator = function (sep) {
-  separator = sep;
-};
-
-// Add aliases for each provider
-providersNames.forEach(function (name) {
-  module.exports[name] = function (repo) {
-    var issue = new Issue();
-    issue.provider(name);
-    if (repo) {
-      issue.repository(repo);
-    }
-    return issue;
-  };
+  return result;
 });

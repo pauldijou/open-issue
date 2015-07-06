@@ -10,7 +10,7 @@ npm install --save open-issue
 
 ## API
 
-### Basic usage
+### Basic node usage (or browserify)
 
 ```javascript
 var issue = require('open-issue');
@@ -40,6 +40,33 @@ newOne.url();
 
 // Open a new tab in the browser
 newOne.open();
+```
+
+### Basic browser usage
+
+```html
+<!DOCTYPE html>
+<html>
+<head></head>
+<body>
+  <div><input id="title" type="text" name="title" placeholder="Issue title"></div>
+  <div><textarea id="body" name="body" rows="8" cols="40"></textarea></div>
+  <div><button id="open" type="button" name="button">Open issue</button></div>
+
+  <!-- For dev purpose only, install the file locally before going to production -->
+  <script type="text/javascript" src="https://rawgit.com/pauldijou/open-issue/master/index.js"></script>
+  <script type="text/javascript">
+    document.getElementById('open').addEventListener('click', function () {
+      OpenIssue()
+        .provider('github')
+        .repository('pauldijou/open-issue')
+        .title(document.getElementById('title').value)
+        .append(document.getElementById('body').value)
+        .open();
+    });
+  </script>
+</body>
+</html>
 ```
 
 ### Shortcuts

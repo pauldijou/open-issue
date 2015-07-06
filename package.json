@@ -1,35 +1,40 @@
 {
   "name": "open-issue",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Open a new issue with preformatted content",
   "license": "Apache-2.0",
-  "main": "index.js",
+  "main": "lib/node.js",
+  "browser": "lib/browser.js",
   "homepage": "https://github.com/pauldijou/open-issue",
   "bugs": {
-    "url": "https://github.com/pauldijou/open-issue/issues",
-    "email": "paul.dijou@gmail.com"
+    "email": "paul.dijou@gmail.com",
+    "url": "https://github.com/pauldijou/open-issue/issues"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/pauldijou/open-issue.git"
   },
   "author": {
-    "name": "Paul Dijou",
     "email": "paul.dijou@gmail.com",
+    "name": "Paul Dijou",
     "url": "http://pauldijou.fr"
   },
   "keywords": [
     "issue",
-    "open",
-    "new"
+    "new",
+    "open"
   ],
   "dependencies": {
     "opn": "^3.0.0"
   },
   "devDependencies": {
-    "mocha": "*"
+    "jasmine": "^2.3.1",
+    "karma": "^0.12.0",
+    "karma-chrome-launcher": "^0.2.0",
+    "karma-firefox-launcher": "^0.1.6",
+    "karma-jasmine": "^0.3.6"
   },
   "scripts": {
-    "test": "mocha --reporter spec"
+    "test": "jasmine JASMINE_CONFIG_PATH=jasmine.json && karma start"
   }
 }

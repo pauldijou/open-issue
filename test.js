@@ -1,15 +1,19 @@
 // So few tests that they can all fit in one file
-var assert = require('assert');
-var issue = require('./index.js');
+var issue;
+if (typeof require !== 'undefined') {
+  issue = require('./lib/node.js');
+} else {
+  issue = OpenIssue;
+}
 
 describe('open-issue', function () {
   describe('constructor', function () {
     it('should init an empty issue', function () {
-      assert.deepEqual({body: [], labels:[]}, issue().content);
+      expect(issue().content).toEqual({body: [], labels:[]});
     });
 
     it('should init a github issue', function () {
-      assert.deepEqual({provider: 'github', body: [], labels:[]}, issue.github().content);
+      expect(issue.github().content).toEqual({provider: 'github', body: [], labels:[]});
     });
   });
 
@@ -17,72 +21,72 @@ describe('open-issue', function () {
     it('should set title', function () {
       var i = issue();
       i.title('My title');
-      assert.deepEqual({title: 'My title', body: [], labels:[]}, i.content);
+      expect(i.content).toEqual({title: 'My title', body: [], labels:[]});
       i.title(undefined);
-      assert.deepEqual({title: undefined, body: [], labels:[]}, i.content);
+      expect(i.content).toEqual({title: undefined, body: [], labels:[]});
     });
 
     it('should set provider', function () {
       var i = issue();
       i.provider('github');
-      assert.deepEqual({provider: 'github', body: [], labels:[]}, i.content);
+      expect(i.content).toEqual({provider: 'github', body: [], labels:[]});
 
-      assert.throws(function () {
+      expect(function () {
         i.provider(undefined);
-      }, /Invalid provider/);
+      }).toThrowError(/Invalid provider/);
 
-      assert.throws(function () {
+      expect(function () {
         i.provider('unknow');
-      }, /Invalid provider/);
+      }).toThrowError(/Invalid provider/);
     });
 
     it('should set repository', function () {
       var i = issue();
       i.repository('pauldijou/open-issue');
-      assert.deepEqual({repository: 'pauldijou/open-issue', body: [], labels:[]}, i.content);
+      expect(i.content).toEqual({repository: 'pauldijou/open-issue', body: [], labels:[]});
       i.repository(undefined);
-      assert.deepEqual({repository: undefined, body: [], labels:[]}, i.content);
+      expect(i.content).toEqual({repository: undefined, body: [], labels:[]});
     });
 
     it('should set labels', function () {
       var i = issue();
       i.labels('bug', 'fatal', 'error');
-      assert.deepEqual({body: [], labels:['bug', 'fatal', 'error']}, i.content);
+      expect(i.content).toEqual({body: [], labels:['bug', 'fatal', 'error']});
       i.labels('two', undefined, 'more');
-      assert.deepEqual({body: [], labels:['bug', 'fatal', 'error', 'two', 'more']}, i.content);
+      expect(i.content).toEqual({body: [], labels:['bug', 'fatal', 'error', 'two', 'more']});
       i.labels(undefined, null);
-      assert.deepEqual({body: [], labels:['bug', 'fatal', 'error', 'two', 'more']}, i.content);
+      expect(i.content).toEqual({body: [], labels:['bug', 'fatal', 'error', 'two', 'more']});
     });
 
     it('should set milestone', function () {
       var i = issue();
       i.milestone('1.0.0');
-      assert.deepEqual({milestone: '1.0.0', body: [], labels:[]}, i.content);
+      expect(i.content).toEqual({milestone: '1.0.0', body: [], labels:[]});
       i.milestone(undefined);
-      assert.deepEqual({milestone: undefined, body: [], labels:[]}, i.content);
+      expect(i.content).toEqual({milestone: undefined, body: [], labels:[]});
     });
 
     it('should set assignee', function () {
       var i = issue();
       i.assign('pauldijou');
-      assert.deepEqual({assignee: 'pauldijou', body: [], labels:[]}, i.content);
+      expect(i.content).toEqual({assignee: 'pauldijou', body: [], labels:[]});
       i.assign(undefined);
-      assert.deepEqual({assignee: undefined, body: [], labels:[]}, i.content);
+      expect(i.content).toEqual({assignee: undefined, body: [], labels:[]});
     });
 
     it('should append content', function () {
       var i = issue();
       i.append('some text');
-      assert.deepEqual({body: [{type: 'text', value: 'some text'}], labels:[]}, i.content);
+      expect(i.content).toEqual({body: [{type: 'text', value: 'some text'}], labels:[]});
 
       i.append('more text');
-      assert.deepEqual({body: [{type: 'text', value: 'some text'}, {type: 'text', value: 'more text'}], labels:[]}, i.content);
+      expect(i.content).toEqual({body: [{type: 'text', value: 'some text'}, {type: 'text', value: 'more text'}], labels:[]});
 
       i.appendCode('console.log(1);', 'javascript');
-      assert.deepEqual({body: [{type: 'text', value: 'some text'}, {type: 'text', value: 'more text'}, {type: 'code', lang: 'javascript', value: 'console.log(1);'}], labels:[]}, i.content);
+      expect(i.content).toEqual({body: [{type: 'text', value: 'some text'}, {type: 'text', value: 'more text'}, {type: 'code', lang: 'javascript', value: 'console.log(1);'}], labels:[]});
 
       i.append('the end');
-      assert.deepEqual({body: [{type: 'text', value: 'some text'}, {type: 'text', value: 'more text'}, {type: 'code', lang: 'javascript', value: 'console.log(1);'}, {type: 'text', value: 'the end'}], labels:[]}, i.content);
+      expect(i.content).toEqual({body: [{type: 'text', value: 'some text'}, {type: 'text', value: 'more text'}, {type: 'code', lang: 'javascript', value: 'console.log(1);'}, {type: 'text', value: 'the end'}], labels:[]});
     });
   });
 
@@ -124,7 +128,7 @@ describe('open-issue', function () {
     it('should open the browser', function () {
       // No real assert, it's up to you to check your browser ;-)
       issue.github('pauldijou/open-issue').title('Test').labels('bug', 'duplicate').assign('pauldijou').milestone('fake').append('**Please, do not actually create the issue!!** This is just a test.').appendCode('var a = 1 + 2;', 'javascript').append('## Subtitle').append('Hope you like it. Cheers.').open();
-      assert.equal(true, true);
+      expect(true).toBe(true);
     });
   });
 });
@@ -156,20 +160,20 @@ function assertQueries(q1, q2) {
   var queries2 = extractQueries(q2);
 
   for(var i = 0, l = queries1.length; i < l; ++i) {
-    assert.equal(queries1[i].name, queries2[i].name);
-    assert.equal(queries1[i].value, queries2[i].value);
+    expect(queries1[i].name).toEqual(queries2[i].name);
+    expect(queries1[i].value).toEqual(queries2[i].value);
   }
 }
 
 function assertUrls(url1, url2) {
   if (url1 === url2) {
-    assert.equal(true, true);
+    expect(true).toBe(true);
     return;
   }
 
   var parts1 = url1.split('?');
   var parts2 = url2.split('?');
 
-  assert.equal(parts1[0], parts2[0]);
+  expect(parts1[0]).toEqual(parts2[0]);
   assertQueries(parts1[1], parts2[1]);
 }
