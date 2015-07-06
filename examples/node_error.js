@@ -23,6 +23,7 @@ function openIssue(e) {
 
 process.on('uncaughtException', function(e) {
   console.log('[ERROR] An unexpected error occured.\n');
+
   var readline = require('readline').createInterface({
     input: process.stdin,
     output: process.stdout
